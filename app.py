@@ -1,4 +1,4 @@
-from fastapi import FASTAPI
+from fastapi import FastAPI
 
 from predictor import predict
 from schemas import passenger
