@@ -1,17 +1,16 @@
 import joblib
 import pandas as pd
 
-pipeline=joblib.load("model/pipeline.pkl")
+pipeline = joblib.load("model/pipeline.pkl")
 
-def predict(data:dict):
+def predict(data: dict):
     df=pd.DataFrame([data])
-    prediction=pipeline.predict(df)[0]
-    probability=pipeline.predict_proba(df)[0].tolist()
-
+    prediction = pipeline.predict(df)[0]
+    probability = pipeline.predict_proba(df)[0].tolist()
     return{
-        "prediction":int(prediction),
-        "probability":{
-            "no survival":probability[0],
-            "survival":probability[1]
+        "prediction": int(prediction),
+        "probability": {
+            "No Survival": probability[0],
+            "Survival": probability[1]
         }
     }
