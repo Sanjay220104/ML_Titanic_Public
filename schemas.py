@@ -1,9 +1,9 @@
-from typing import optional
+from typing import Optional
 from pydantic import baseModel
 
 class passenger(baseModel):
     pclass:int
     sex:str
 
-    age:optional[float]=None
+    age:Optional[float]=None
     Fare:optional[float]=None
