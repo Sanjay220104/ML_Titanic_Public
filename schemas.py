@@ -6,4 +6,4 @@ class passenger(baseModel):
     sex:str
 
     age:Optional[float]=None
-    Fare:optional[float]=None
+    fare:Optional[float]=None
