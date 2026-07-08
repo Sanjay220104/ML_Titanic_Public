@@ -9,7 +9,6 @@ from sklearn.preprocessing import StandardScaler,OrdinalEncoder
 from sklearn.linear_model import LogisticRegression
 
 #------------------------------------------------------------#
-
 df=sns.load_dataset("titanic")
 
 # keep only required values
