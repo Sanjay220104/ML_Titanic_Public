@@ -1,4 +1,3 @@
-from numpy._core import numeric
 import joblib
 import pandas as pd
 import seaborn as sns
@@ -6,40 +5,74 @@ import os
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler, OrdinalEncoder
+from sklearn.preprocessing import StandardScaler,OrdinalEncoder
 from sklearn.linear_model import LogisticRegression
 
-df = sns.load_dataset("titanic")
+#------------------------------------------------------------#
 
-df = df[["pclass", "sex", "age", "fare", "survived"]]
+df=sns.load_dataset("titanic")
 
-x = df.drop("survived", axis=1)
-y = df["survived"]
+# keep only required values
 
-numeric_feature = ["age", "fare"]
-categorical_features = ["sex", "pclass"]
+df=df[["pclass","age","sex","fare","survived"]]
 
-numeric_pipeline = Pipeline([
-    ("imputer", SimpleImputer(strategy="median")),
-    ("scaler", StandardScaler())
-])
-categorical_pipeline = Pipeline(
+x=df.drop("survived",axis=1)
+y=df["survived"]
+#------------------------------
+#    features
+#-------------------------------
+
+numeric_features=["age","fare"]
+categorical_features=["sex","pclass"]
+
+#-------------------------------
+# numeric pipeline
+#-------------------------------
+
+numeric_pipeline=Pipeline(
     [
-        ("imputer", SimpleImputer(strategy="most_frequent")),
-        ("scaler", OrdinalEncoder())
-    ])
-preprocessor = ColumnTransformer([
-    ("num", numeric_pipeline, numeric_feature),
-    ("cat", categorical_pipeline, categorical_features)
+        ("imputer",SimpleImputer(strategy="median")),
+        ("scaler",StandardScaler())
+    ]
+)
+
+
+#---------------------------------
+# categorical pipeline
+#---------------------------------
+
+categorical_pipeline=Pipeline(
+    [
+        ("imputer",SimpleImputer(strategy="most_frequent")),
+        ("encoder",OrdinalEncoder())
+    ]
+)
+
+#----------------------------------
+#    combine
+#----------------------------------
+
+preprocessor = ColumnTransformer(
+    [
+        ("num",numeric_pipeline, numeric_features),
+        ("cat",categorical_pipeline,categorical_features)
+    ]
+)
+
+#----------------------------------
+#       Final pipeline
+#----------------------------------
+
+
+pipeline=Pipeline([
+    ("preprocessor",preprocessor),
+    ("classifier",LogisticRegression())
 ])
 
-pipeline = Pipeline([
-    ("preprocessor", preprocessor),
-    ("classifier", LogisticRegression())
-])
+pipeline.fit(x,y)
 
-os.makedirs("model", exist_ok=True)
+#create the "model" directory if it doesn't exist
 
-joblib.dump(pipeline, "model/pipeline.pkl")
-
+os.makedirs("model",exist_ok=True)
+joblib.dump(pipeline,"model/pipeline.pkl")
 print("pipeline saved successfully")
