@@ -1,4 +1,4 @@
-from typing import optimal
+from typing import optional
 from pydantic import baseModel
 
 class passenger(baseModel):
