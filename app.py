@@ -1,20 +1,16 @@
 from fastapi import FastAPI
-
 from predictor import predict
-from schemas import passenger
-app=FastApi(
-    title-"titanic survival API",
+from schemas import Passenger
+app=FastAPI(
+    title="Titanic Survival API",
     version="1.0"
 )
 @app.get("/")
 def home():
-
-    return{
-        "message":"titanic predictiom API is running."
+    return {
+        "message":"Titanic Prediction API is running."
     }
 @app.post("/predict")
-def predict_survival(pessenger:passenger):
-
-    result=predict(passenger.model_dump())
-
+def predict_survival(passenger:Passenger):
+    result = predict(passenger.model_dump())
     return result
